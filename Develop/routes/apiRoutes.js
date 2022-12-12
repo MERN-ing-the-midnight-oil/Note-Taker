@@ -1,6 +1,7 @@
 //this destructuring chooses the methods from the helpers utility
 const { readFromFile, readAndAppend } = require("../Helpers/fsUtils");
-
+//makes a random number that can be used as a note id.
+const uuid = require("../Helpers/uuid");
 //just need a router definition,
 const myRouter = require("express").Router();
 
