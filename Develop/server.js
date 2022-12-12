@@ -1,4 +1,5 @@
 const express = require("express");
+const uuid = require("./Helpers/uuid");
 const app = express(); //"app" is now a router
 const PORT = 3001;
 const apiRoutes = require("./routes/apiRoutes.js");
@@ -20,6 +21,6 @@ app.listen(
 	PORT,
 	() =>
 		console.log(
-			`Merry Christmas. This is showing that this app is listening at http://localhost:${PORT}` //test
+			`App is listening at http://localhost:${PORT}` //test
 		)
 );
