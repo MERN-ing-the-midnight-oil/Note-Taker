@@ -1,7 +1,7 @@
 const express = require("express");
 const uuid = require("./Helpers/uuid");
 const app = express(); //"app" is now a router
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const apiRoutes = require("./routes/apiRoutes.js");
 const htmlRoutes = require("./routes/htmlRoutes.js");
 
