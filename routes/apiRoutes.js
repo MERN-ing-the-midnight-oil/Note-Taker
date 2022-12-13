@@ -1,4 +1,5 @@
 //this destructuring chooses the methods from the helpers utility
+const fs = require("fs");
 const { readFromFile, readAndAppend } = require("../Helpers/fsUtils");
 //makes a random number that can be used as a note id.
 const uuid = require("../Helpers/uuid");
@@ -18,9 +19,9 @@ myRouter.post("/notes", (req, res) => {
 	const { title, text } = req.body;
 	if (req.body) {
 		const newNote = {
-			title,
-			text,
-			note_id: uuid(), //I need to add a note_id here
+			title, //this title is coming from the request body
+			text, //this text is coming from the request body
+			id: uuid(), //this id number is being generated on the fly by uuid()
 		};
 		//this adds the new note to the db.json file, which the client will then see with a new GET request
 		readAndAppend(newNote, "./db/db.json");
@@ -31,9 +32,38 @@ myRouter.post("/notes", (req, res) => {
 });
 
 //put some numbers on the end of the URL while testing in insomnia
+//DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
 myRouter.delete("/notes/:id", (req, res) => {
-	console.log(`check out this sweet DELETE req.body:`, req.body);
-	res.send(`<p> you just asked to delete, Merry Christmas! </p>`);
+	readFromFile("./db/db.json").then((data) => {
+		let array = JSON.parse(data);
+		let newArray = [];
+		//41 - 46 is getting specific data, could use the filter function, a built in filter for array.
+		for (let i = 0; i < array.length; i++) {
+			//build the array one at a time, skip the one to skip
+			if (array[i].id !== req.params.id) {
+				newArray.push(array[i]);
+			}
+		}
+		//fs writeFile needs the response. if there is an error, then get an error. the callback function provides an error or result.
+		fs.writeFile("./db/db.json", JSON.stringify(newArray), (err, data) => {
+			//send back a response
+			res.json("Your note has been deleted");
+		});
+	});
+	res.send();
+
+	// if (req.body.){
+	//  	const NoteId = req.body.id;
+	// 	//?// maybe// const NodeId = req.params.id
+	// //probably going to need the name of the array here not the file :-(. how to name the array?
+	//  	for (let i = 0; i< array.length; i++){
+	// 	const eachId = array[i].id;
+	// 	if (NoteId === eachId){
+	// 		//somehow delete array[i];
+	// 	}
 });
+
+// 		const noteId = array[i].id;...
+// }
 
 module.exports = myRouter;
