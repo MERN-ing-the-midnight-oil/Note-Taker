@@ -27,7 +27,7 @@ myRouter.post("/notes", (req, res) => {
 		readAndAppend(newNote, "./db/db.json");
 		res.json(`note was added to db.json successfully 🚀`);
 	} else {
-		res.error("Error in adding tip");
+		res.error("Error in adding note");
 	}
 });
 
@@ -43,12 +43,9 @@ myRouter.delete("/notes/:id", (req, res) => {
 			}
 		}
 		//fs writeFile needs the response. if there is an error, then get an error. the callback function provides an error or result.
-		fs.writeFile("./db/db.json", JSON.stringify(newArray), (err, data) => {
-			//add a response
-			res.json("Your note has been deleted");
-		});
+		fs.writeFile("./db/db.json", JSON.stringify(newArray), (err, data) => {});
 	});
-	//send the response
-	res.send();
+	//add a response
+	res.json("Your note has been deleted");
 });
 module.exports = myRouter;
