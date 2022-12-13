@@ -31,13 +31,11 @@ myRouter.post("/notes", (req, res) => {
 	}
 });
 
-//put some numbers on the end of the URL while testing in insomnia
-//DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
+//handles delete requests from the frontend application (user clicks the delete button). Reads the current notes and rewrites only the notes that don't match the ID of the note to be deleted.
 myRouter.delete("/notes/:id", (req, res) => {
 	readFromFile("./db/db.json").then((data) => {
 		let array = JSON.parse(data);
 		let newArray = [];
-		//41 - 46 is getting specific data, could use the filter function, a built in filter for array.
 		for (let i = 0; i < array.length; i++) {
 			//build the array one at a time, skip the one to skip
 			if (array[i].id !== req.params.id) {
@@ -46,24 +44,11 @@ myRouter.delete("/notes/:id", (req, res) => {
 		}
 		//fs writeFile needs the response. if there is an error, then get an error. the callback function provides an error or result.
 		fs.writeFile("./db/db.json", JSON.stringify(newArray), (err, data) => {
-			//send back a response
+			//add a response
 			res.json("Your note has been deleted");
 		});
 	});
+	//send the response
 	res.send();
-
-	// if (req.body.){
-	//  	const NoteId = req.body.id;
-	// 	//?// maybe// const NodeId = req.params.id
-	// //probably going to need the name of the array here not the file :-(. how to name the array?
-	//  	for (let i = 0; i< array.length; i++){
-	// 	const eachId = array[i].id;
-	// 	if (NoteId === eachId){
-	// 		//somehow delete array[i];
-	// 	}
 });
-
-// 		const noteId = array[i].id;...
-// }
-
 module.exports = myRouter;
