@@ -37,7 +37,7 @@ myRouter.delete("/notes/:id", (req, res) => {
 		let array = JSON.parse(data);
 		let newArray = [];
 		for (let i = 0; i < array.length; i++) {
-			//build the array one at a time, skip the one to skip
+			//build the array one at a time, leaving out the deleted one.
 			if (array[i].id !== req.params.id) {
 				newArray.push(array[i]);
 			}
